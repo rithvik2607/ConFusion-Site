@@ -55,7 +55,7 @@ import { Link } from 'react-router-dom';
 
   const Dishdetail = (props) => {
     const dish = props.dish;
-    const comment = props.comment;
+    const comment = props.comments;
     if(dish==null){
       return(
         <div></div>
