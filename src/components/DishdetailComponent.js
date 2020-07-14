@@ -27,7 +27,7 @@ const minLength = (len) => (val) => val && (val.length >= len);
     }
   }
 
-  function RenderComments({comments}) {
+  function RenderComments({comments, dishId, addComment}) {
     if(comments==null){
       return(
         <div></div>
@@ -48,7 +48,7 @@ const minLength = (len) => (val) => val && (val.length >= len);
         </li>
       )
     });
-    comment.push(<CommentForm></CommentForm>)
+    comment.push(<CommentForm dishId={dishId} addComment={addComment}></CommentForm>)
     return(
       <div className="col-12 col-sm-5 m-1">
         <h4>Comments</h4>
@@ -62,6 +62,8 @@ const minLength = (len) => (val) => val && (val.length >= len);
   const Dishdetail = (props) => {
     const dish = props.dish;
     const comment = props.comments;
+    const addComment = props.addComment;
+    const dishId = props.dish.id;
     if(dish==null){
       return(
         <div></div>
@@ -81,7 +83,9 @@ const minLength = (len) => (val) => val && (val.length >= len);
         </div>
         <div className="row">
           <RenderDish dish={dish} />
-          <RenderComments comments={comment} />
+          <RenderComments comments={comment} 
+          dishId={dishId}
+          addComment={addComment}/>
         </div>
       </div>
     );
@@ -107,8 +111,7 @@ class CommentForm extends Component {
   }
 
   handleSubmit(values) {
-    console.log('Current state is '+ JSON.stringify(values));
-    alert('Current state is '+ JSON.stringify(values));
+    this.props.addComment(this.props.dishId, values.rating, values.author, values.comment);
   }
 
   render() {
@@ -131,14 +134,14 @@ class CommentForm extends Component {
               </Row>
               <Row className="form-group">
                 <Label htmlFor="name" className="m-2">Your Name</Label>
-                <Control.text model=".name" name="name" id="name" placeholder="Your Name" className="form-control m-2"
+                <Control.text model=".author" name="author" id="author" placeholder="Your Name" className="form-control m-2"
                   validators={{
                     required, maxLength: maxLength(15), minLength: minLength(3)
                   }}
                   />
                     <Errors
                       className="text-danger"
-                      model=".name"
+                      model=".author"
                       show="touched"
                       messsages={{
                         required: 'Required',
