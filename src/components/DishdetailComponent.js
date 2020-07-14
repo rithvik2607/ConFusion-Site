@@ -1,6 +1,11 @@
-import React from 'react';
-import { Card, CardImg, CardText, CardBody, CardTitle, Breadcrumb, BreadcrumbItem } from 'reactstrap';
+import React, { Component } from 'react';
+import { Card, CardImg, CardText, CardBody, CardTitle, Breadcrumb, BreadcrumbItem, Button, Modal, ModalHeader, ModalBody, Label, Row } from 'reactstrap';
+import { Control, LocalForm, Errors } from 'react-redux-form';
 import { Link } from 'react-router-dom';
+
+const required = (val) => val && (val.length);
+const maxLength = (len) => (val) => !(val) || (val.length <= len);
+const minLength = (len) => (val) => val && (val.length >= len);
 
   function RenderDish({dish}) {
     if(dish!=null) {
@@ -43,6 +48,7 @@ import { Link } from 'react-router-dom';
         </li>
       )
     });
+    comment.push(<CommentForm></CommentForm>)
     return(
       <div className="col-12 col-sm-5 m-1">
         <h4>Comments</h4>
@@ -50,7 +56,7 @@ import { Link } from 'react-router-dom';
           {comment}
         </ul>
       </div>
-    )
+    );
   }
 
   const Dishdetail = (props) => {
@@ -80,5 +86,81 @@ import { Link } from 'react-router-dom';
       </div>
     );
   }
+
+
+class CommentForm extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      isModalOpen: false
+    };
+
+    this.toggleModal = this.toggleModal.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  toggleModal() {
+    this.setState({
+      isModalOpen: !this.state.isModalOpen
+    });
+  }
+
+  handleSubmit(values) {
+    console.log('Current state is '+ JSON.stringify(values));
+    alert('Current state is '+ JSON.stringify(values));
+  }
+
+  render() {
+    return(
+      <div>
+        <Button outline onClick={this.toggleModal}><span className="fa fa-pencil fa-lg"></span> Submit Comment</Button>
+        <Modal isOpen={this.state.isModalOpen} toggle={this.toggleModal}>
+          <ModalHeader toggle={this.toggleModal}>Submit Comment</ModalHeader>
+          <ModalBody>
+            <LocalForm onSubmit={(values) => this.handleSubmit(values)}>
+              <Row className="form-group">
+                <Label htmlfor="rating" className="m-2">Rating</Label>
+                <Control.select model=".rating" name="rating" class="form-control m-2">
+                  <option>1</option>
+                  <option>2</option>
+                  <option>3</option>
+                  <option>4</option>
+                  <option>5</option>
+                </Control.select>
+              </Row>
+              <Row className="form-group">
+                <Label htmlFor="name" className="m-2">Your Name</Label>
+                <Control.text model=".name" name="name" id="name" placeholder="Your Name" className="form-control m-2"
+                  validators={{
+                    required, maxLength: maxLength(15), minLength: minLength(3)
+                  }}
+                  />
+                    <Errors
+                      className="text-danger"
+                      model=".name"
+                      show="touched"
+                      messsages={{
+                        required: 'Required',
+                        maxLength: 'Must be 15 characters or less',
+                        minLength: 'Must be greater than 2 characters'
+                      }}
+                    />
+              </Row>
+              <Row className="form-group">
+                <Label htmlfor="comment" className="m-2">Comment</Label>
+                <Control.textarea model=".comment" name="comment" id="comment" rows="6"
+                className="form-control m-2"></Control.textarea>
+              </Row>
+              <Row className="form-group m-2">
+                <Button type="submit" color="primary">Submit</Button>
+              </Row>
+            </LocalForm>
+          </ModalBody>
+        </Modal>
+      </div>
+    );
+  }
+}
 
 export default Dishdetail;
