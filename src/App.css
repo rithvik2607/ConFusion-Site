@@ -45,7 +45,7 @@ address{
 
 .page-exit {
   opacity: 1;
-  transform: translateX(0)%;
+  transform: translateX(0%);
 }
 
 .page-exit-active {
