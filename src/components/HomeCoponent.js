@@ -39,16 +39,13 @@ function Home(props) {
       <h4>Home</h4>
       <div className="row align-items-start">
         <div className="col-12 col-md m-1">
-          <RenderCard item={props.dish} 
-          isLoading={props.dishLoading}
-          errMess={props.dishErrMess}
-          />
+          <RenderCard item={props.dish} isLoading={props.dishLoading} errMess={props.dishErrMess} />
         </div>
         <div className="col-12 col-md m-1">
           <RenderCard item={props.promotion} isLoading={props.promoLoading} errMess={props.promoErrMess} />
         </div>
         <div className="col-12 col-md m-1">
-          <RenderCard item={props.leader} />
+          <RenderCard item={props.leader} isLoading={props.leaderLoading} errMess={props.leaderErrMess} />
         </div>
       </div>
     </div>
